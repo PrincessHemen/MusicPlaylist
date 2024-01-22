@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Create Your Playlist</title>
+  </head>
+  <body>
+    <header>
+      <h1>Playlist Buddy</h1>
+      <nav>
+        <a href="/index.html">Home</a>
+        <a href="/create.html">Create Playlist</a>
+        <a href="/view.html">My Playlists</a>
+      </nav>
+    </header>
+    <div class="container">
+      <form class="createForm" id="songsContainer" method="POST">
+        <label class="formTitle" for="playlistTitle">Playlist Title:</label>
+        <input
+          type="text"
+          id="playlistTitle"
+          name="playlistTitle"
+          required
+        /><br />
+        <br />
+
+        <label class="formTitle">Songs:</label> <br />
+        <input
+          type="checkbox"
+          id="songViena"
+          name="song"
+          value="./media/Billy-Joel-Vienna-via-Naijafinix.com_.mp3"
+        />
+        <label for="song1">Vienna</label><br />
+
+        <input
+          type="checkbox"
+          id="songPianoMan"
+          name="song"
+          value="./media/Billy_Joel_-_Piano_Man_(Jesusful.com).mp3"
+        />
+        <label for="song2">Piano Man</label><br />
+
+        <input
+          type="checkbox"
+          id="songRunTheWorld"
+          name="song"
+          value="./media/Beyoncé - Run The World (Girls) HD.mp3"
+        />
+        <label for="song3">Run The World Girls</label><br />
+
+        <input
+          type="checkbox"
+          id="songBestofBoth"
+          name="song"
+          value="./media/Best of Both Worlds (WWE Network) feat. Tyrone Briggs   Nancy Rowland (320 .mp3"
+        />
+        <label for="song4">Best of Both Worlds</label><br />
+
+        <input
+          type="checkbox"
+          id="songAriwoKo"
+          name="song"
+          value="./media/Adekunle_GoldAriwo_Ko_(Mp3Nobs.com).mp3"
+        />
+        <label for="song5">Ariwo Ko</label><br />
+
+        <input
+          type="checkbox"
+          id="songHallelujah"
+          name="song"
+          value="./media/Alexandra Burke¤Hallelujah.mp3"
+        />
+        <label for="song6">Hallelujah</label><br />
+
+        <input
+          type="checkbox"
+          id="songBeliever"
+          name="song"
+          value="/media/035.  Imagine Dragons - Believer.mp3"
+        />
+        <label for="song7">Believer</label><br />
+
+        <input
+          type="checkbox"
+          id="songBrownSkin"
+          name="song"
+          value="./media/15 BROWN SKIN GIRL (feat. Blue Ivy C.mp3"
+        />
+        <label for="song8">Brown Skin Girl</label><br />
+
+        <input
+          type="checkbox"
+          id="songUnstoppable"
+          name="song"
+          value="./media/05. Unstoppable.mp3"
+        />
+        <label for="song9">Unstoppable</label><br />
+
+        <input
+          type="checkbox"
+          id="songHallelujahEh"
+          name="song"
+          value="./media/HallelujahEh_NathanielBassey.mp3"
+        />
+        <label for="song10">HallelujahEh</label><br />
+
+        <input
+          type="checkbox"
+          id="songScars"
+          name="song"
+          value="./media/ScarsToYourBeautiful_AlessiaCara.mp3"
+        />
+        <label for="song12">Scars To Your Beautiful</label><br />
+
+        <input
+          type="checkbox"
+          id="song13"
+          name="song"
+          value="./media/Gold_ImagineDragons.mp3"
+        />
+        <label for="song13">Gold</label><br /><br />
+
+        <input type="submit" class="createPlayBtn" value="CREATE PLAYLIST" />
+
+        <br />
+        <br />
+      </form>
+    </div>
+
+    <!-----Create Playlist JS------>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const createForm = document.querySelector(".createForm");
+
+        createForm.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const title = document.getElementById("playlistTitle").value;
+
+          // Get the selected songs
+          const selectedSongs = Array.from(
+            document.querySelectorAll('input[name="song"]:checked')
+          ).map((checkbox) => checkbox.value);
+
+          // Send data to server to create a new playlist
+          const response = await fetch(
+            "http://localhost:3000/playlist/create",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                title,
+                songs: selectedSongs,
+              }),
+            }
+          );
+
+          if (response.ok) {
+            const playlist = await response.json();
+            document.location.href = "/index.html";
+          } else {
+            alert("Error creating playlist");
+          }
+        });
+      });
+
+      // Function to load and populate songs in checkboxes
+      async function loadSongs() {
+        try {
+          // Fetch the list of songs from the server
+          const response = await fetch("http://localhost:3000/songs/");
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          const songs = data.songs; // Assuming the server returns an array of songs
+          console.log(songs);
+
+          // Get the container for checkboxes
+          const songsContainer = document.getElementById("songsContainer");
+
+          // Populate the checkboxes dynamically
+          songs.forEach((song) => {
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.id = `song${song._id}`; // Assuming each song has a unique identifier
+            checkbox.name = "song";
+            checkbox.value = song._id; // Assuming song._id is the unique identifier of each song
+
+            const label = document.createElement("label");
+            label.htmlFor = `song${song._id}`;
+            label.appendChild(document.createTextNode(song.title)); // Assuming each song has a 'title' property
+
+            // Add the checkbox and label to the container
+            songsContainer.appendChild(checkbox);
+            songsContainer.appendChild(label);
+            songsContainer.appendChild(document.createElement("br"));
+          });
+
+          songsContainer.innerHTML += `<input type="submit" class="createPlayBtn" value="CREATE PLAYLIST" />`;
+        } catch (error) {
+          console.error("Error loading songs:", error.message);
+        }
+      }
+
+      // Call the function to load and populate songs
+      loadSongs();
+    </script>
+  </body>
+</html>

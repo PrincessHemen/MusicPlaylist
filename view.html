@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>View Your Playlists</title>
+  </head>
+  <body>
+    <header>
+      <h1>Playlist Buddy</h1>
+      <nav>
+          <a href="/index.html">Home</a>
+          <a href="/create.html">Create Playlist</a>
+          <a href="/view.html">My Playlists</a>
+      </nav>
+  </header>
+  
+    <div class="container">
+      <h1 class="viewPlay">My Playlists</h1>
+      <ul id="playlist">
+      </ul>
+    </div>
+  </body>
+  <script>
+  
+
+async function getPlaylists() {
+  try {
+    console.log("Yes")
+    // Fetch playlists from the server
+    const response = await fetch("http://localhost:3000/playlist/view");
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const playlists = await response.json();
+
+    // Display playlists in the UI
+    const playlistContainer = document.getElementById("playlist");
+
+    if (playlists.length == 0){
+      alert("No playlist created");
+      return;
+    }
+
+    playlists.forEach((playlist) => {
+      const playlistItem = document.createElement("a");
+      const br = document.createElement("br");
+      playlistItem.className = "playlist-item";
+      playlistItem.textContent = playlist.playlistName;
+      playlistItem.href = `http://127.0.0.1:5500/viewPlaylist.html?id=${playlist._id}`
+
+      const copyLink = document.createElement("a");
+      copyLink.href = `http://127.0.0.1:5500/viewPlaylist.html?id=${playlist._id}`;
+      copyLink.className = "copy-link";
+      copyLink.textContent = "Share Playlist";
+
+      playlistItem.appendChild(copyLink);
+      playlistContainer.appendChild(br)
+      playlistContainer.appendChild(playlistItem);
+
+    });
+  } catch (error) {
+    console.error("Error getting playlists:", error.message);
+  }
+}
+
+// Call the function to get and display playlists
+getPlaylists();
+
+  </script>
+</html>
