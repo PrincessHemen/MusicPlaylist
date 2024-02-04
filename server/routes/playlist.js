@@ -6,7 +6,9 @@ const Playlist = require('../models/playlist');
 router.post('/create', async (req, res) => {
   try {
     const { title, songs } = req.body;
+    console.log('Received Playlist Data:', title, songs);
     const playlist = new Playlist({ playlistName: title, songs });
+    console.log('Playlist Object:', playlist);
     await playlist.save(); 
     res.status(201).send(playlist);
   } catch (error) {

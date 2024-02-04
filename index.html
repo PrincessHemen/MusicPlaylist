@@ -7,17 +7,16 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="style.css" />
     <title>Music Player</title>
-    
   </head>
   <body>
     <header>
       <h1>Playlist Buddy</h1>
       <nav>
-          <a href="/index.html">Home</a>
-          <a href="/create.html">Create Playlist</a>
-          <a href="/view.html">My Playlists</a>
+        <a href="/index.html">Home</a>
+        <a href="/create.html">Create Playlist</a>
+        <a href="/view.html">My Playlists</a>
       </nav>
-  </header>
+    </header>
     <div class="container">
       <div class="music-player">
         <nav>
@@ -36,10 +35,7 @@
         <p class="songsinger"></p>
 
         <audio id="song">
-          <source
-            src=""
-            type="audio/mpeg"
-          />
+          <source src="" type="audio/mpeg" />
         </audio>
 
         <input type="range" value="0" id="progress" />
@@ -57,8 +53,12 @@
         </div>
       </div>
       <div class="playListMenu">
-        <a href="./create.html"><button class="createPlayBtn" id="create">CREATE PLAYLIST</button></a>
-        <a href="./view.html"><button class="createPlayBtn" id="view">VIEW PLAYLIST</button></a>
+        <a href="./create.html"
+          ><button class="createPlayBtn" id="create">CREATE PLAYLIST</button></a
+        >
+        <a href="./view.html"
+          ><button class="createPlayBtn" id="view">VIEW PLAYLIST</button></a
+        >
       </div>
     </div>
 
